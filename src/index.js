@@ -12,13 +12,13 @@ const PORT = process.env.PORT || 3333
 
 const app = express()
 
-app.use(express.json())
-app.use(cors())
-
 mongoose.connect(process.env.MONGO_URL, {
     useUnifiedTopology: true,
     useNewUrlParser: true
 }, console.log('connected to db'))
+
+app.use(cors())
+app.use(express.json())
 
 app.post('/sessions', async (req, res) => {
     const { username } = req.body
