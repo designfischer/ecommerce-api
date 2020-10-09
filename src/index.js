@@ -7,6 +7,7 @@ require('dotenv').config()
 const User = require('./models/User')
 const Product = require('./models/Product')
 const Cart = require('./models/Cart')
+const Discount = require('./models/DiscountPolicy')
 
 const PORT = process.env.PORT || 3333
 
@@ -88,7 +89,7 @@ app.post('/cart/:user_id', async (req, res) => {
         const newCart = await Cart.create({ 
             items, 
             totalValue,
-            addres,
+            address,
             card,
             username: user_id 
         })
@@ -108,6 +109,30 @@ app.get('/cart/:user_id', async (req, res) => {
     try {
         const cartsOfAUser = await Cart.find({ username: user_id })
         return res.status(200).send(cartsOfAUser)
+    } catch(err) {
+        return res.status(400).send(err)
+    }
+})
+
+app.post('/discountpolicies', async (req, res) => {
+    const body = req.body 
+    const { authorization } = req.headers   
+
+    if (!authorization) return res.status(400).send('Operation not allowed')
+    if (authorization !== process.env.ADMIN) return res.status(400).send('Operation not allowed')
+
+    try {
+        const createdPolicies = await Discount.create(body)
+        return res.status(200).send(createdPolicies)
+    } catch(err) {
+        return res.status(400).send(err)
+    }
+})
+
+app.get('/discountpolicies', async (req, res) => {
+    try {
+        const discountPolicies = await Discount.find()
+        return res.status(200).send(discountPolicies)
     } catch(err) {
         return res.status(400).send(err)
     }
