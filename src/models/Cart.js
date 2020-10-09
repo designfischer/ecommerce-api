@@ -9,6 +9,15 @@ const Schema = new mongoose.Schema({
         }         
     }],
     totalValue: Number,
+    address: {
+        street: String,
+        number: Number,
+        neighbourhood: String
+    },
+    card: {
+        number: String,
+        cvc: String
+    },
     username: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

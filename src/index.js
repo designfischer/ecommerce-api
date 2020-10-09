@@ -77,7 +77,7 @@ app.get('/products/:user_id', async (req, res) => {
 
 app.post('/cart/:user_id', async (req, res) => {
     const { user_id } = req.params
-    const { items, totalValue } = req.body  
+    const { items, totalValue, address, card } = req.body  
 
     if (items.lenght === 0) return res.status(400).send({ message: 'Cart must not be empty' })
      
@@ -86,8 +86,10 @@ app.post('/cart/:user_id', async (req, res) => {
         //const chosenProducts = await Product.find().where('_id').in(itensID).exec()
        
         const newCart = await Cart.create({ 
-            items: items, 
+            items, 
             totalValue,
+            addres,
+            card,
             username: user_id 
         })
         await newCart.populate('items.product_id')
